@@ -10,3 +10,5 @@ build/
 *.iws
 
 
+UnityPluginAndSample/Assets/test.unity
+UnityPluginAndSample/Assets/test.unity.meta
