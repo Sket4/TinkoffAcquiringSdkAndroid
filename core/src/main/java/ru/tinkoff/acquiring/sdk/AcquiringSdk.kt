@@ -255,22 +255,26 @@ class AcquiringSdk(
          *
          * Передача токена для SDK терминалов в общем случае не обязательна и зависит от настроек терминала.
          */
+        @JvmField
         var tokenGenerator: AcquiringTokenGenerator? = null
 
         /**
          * Позволяет использовать свой логгер или заданный
          */
+        @JvmField
         var logger: Logger = JavaLogger()
 
         /**
          * Позволяет включить логирование. По-умолчанию выключен
          */
+        @JvmField
         var isDebug = false
 
         /**
          * Позволяет переключать SDK с тестового режима и обратно. В тестовом режиме деньги с карты не
          * списываются. По-умолчанию выключен
          */
+        @JvmField
         var isDeveloperMode = false
 
 

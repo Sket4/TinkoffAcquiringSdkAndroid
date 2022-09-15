@@ -4,3 +4,4 @@ include ':sample',
         ':ui',
         ':threeds-sdk',
         ':threeds-wrapper'
+include ':tinkoff_unity'
