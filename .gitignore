@@ -12,3 +12,9 @@ build/
 
 UnityPluginAndSample/Assets/test.unity
 UnityPluginAndSample/Assets/test.unity.meta
+UnityPluginAndSample/Library
+UnityPluginAndSample/Logs
+UnityPluginAndSample/Temp
+*.csproj
+*.sln
+UnityPluginAndSample/.vs
