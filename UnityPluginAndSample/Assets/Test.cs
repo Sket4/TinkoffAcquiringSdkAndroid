@@ -7,6 +7,26 @@ public class Test : MonoBehaviour
 
     void Start()
     {
-        TinkoffPaymentParameters.StartPaymentProcess(Parameters);
+        Api.StartPaymentProcess(Parameters);
+    }
+
+    public void Run()
+    {
+        Api.StartPaymentProcess(Parameters);
+    }
+
+    public void GetStatus()
+    {
+        Api.GetPaymentStatus(new TinkoffGetStateRequest
+        {
+            TerminalKey = Parameters.TerminalKey,
+            PublicKey = Parameters.PublicKey,
+            PaymentId = 1792296557,
+        });
+    }
+
+    public void SetOrderId(string id)
+    {
+        Parameters.OrderId = id;
     }
 }

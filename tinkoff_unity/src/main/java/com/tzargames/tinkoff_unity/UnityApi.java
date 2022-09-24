@@ -7,6 +7,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.tinkoff.acquiring.sdk.AcquiringSdk;
 import ru.tinkoff.acquiring.sdk.TinkoffAcquiring;
@@ -15,9 +18,16 @@ import ru.tinkoff.acquiring.sdk.models.options.CustomerOptions;
 import ru.tinkoff.acquiring.sdk.models.options.FeaturesOptions;
 import ru.tinkoff.acquiring.sdk.models.options.OrderOptions;
 import ru.tinkoff.acquiring.sdk.models.options.screen.PaymentOptions;
+import ru.tinkoff.acquiring.sdk.requests.GetStateRequest;
 import ru.tinkoff.acquiring.sdk.utils.Money;
 import ru.tinkoff.acquiring.sdk.utils.SampleAcquiringTokenGenerator;
 import ru.tinkoff.cardio.CameraCardIOScanner;
+
+class AdditionalKeyValueData
+{
+    public String Key;
+    public String Value;
+}
 
 class TinkoffPaymentParameters
 {
@@ -33,6 +43,19 @@ class TinkoffPaymentParameters
     public boolean IsDevMode;
     public boolean IsDebugMode;
     public boolean EnableFps;
+
+    public ArrayList<AdditionalKeyValueData> AdditionalData;
+}
+
+class TinkoffApiRequest
+{
+    public String TerminalKey;
+    public String PublicKey;
+}
+
+class TinkoffGetStateRequest extends TinkoffApiRequest
+{
+    public Long PaymentId;
 }
 
 public class UnityApi
@@ -60,6 +83,33 @@ public class UnityApi
         }
     }
 
+    public static final void GetPaymentStatus(String getPaymentStatusRequestJson)
+    {
+        Gson gson = new Gson();
+        TinkoffGetStateRequest params = gson.fromJson(getPaymentStatusRequestJson, TinkoffGetStateRequest.class);
+        AcquiringSdk api = new AcquiringSdk(params.TerminalKey, params.PublicKey);
+
+
+        Log.i(TAG, "Trying to get payment status " + params.PaymentId);
+
+        GetStateRequest request = api.getState((req) ->
+        {
+            req.setPaymentId(params.PaymentId);
+            return null;
+        });
+
+        request.execute((response) ->
+                {
+                    Log.i(TAG, "Response status " + response.getStatus());
+                    return null;
+                },
+                (exception) ->
+                {
+                    Log.e(TAG, exception.getMessage());
+                    return null;
+                });
+    }
+
     public static final void OpenPaymentScreen(Activity activity, String paymentParamsJson)
     {
         try
@@ -85,6 +135,30 @@ public class UnityApi
             String customerKey = params.CustomerKey == null || params.CustomerKey.isEmpty() ? null : params.CustomerKey;
             customerOptions.setCustomerKey(customerKey);        // уникальный ID пользователя для сохранения данных его карты
             customerOptions.setEmail(params.ClientEmail);          // E-mail клиента для отправки уведомления об оплате
+
+            if(params.AdditionalData != null)
+            {
+                Log.i(TAG, "Additional data: " + params.AdditionalData.size());
+                Map<String, String> additionalData = new HashMap<String, String>();
+
+                for (AdditionalKeyValueData kv: params.AdditionalData)
+                {
+                    if(additionalData.containsKey(kv.Key))
+                    {
+                        Log.e(TAG, "Already contains key " + kv.Key);
+                        continue;
+                    }
+                    Log.i(TAG, kv.Key + " " + kv.Value);
+                    additionalData.put(kv.Key, kv.Value);
+                }
+
+                customerOptions.setData(additionalData);
+            }
+            else
+            {
+                Log.i(TAG, "no additional data");
+            }
+
             options.setCustomer(customerOptions);
 
             FeaturesOptions featuresOptions = new FeaturesOptions();
