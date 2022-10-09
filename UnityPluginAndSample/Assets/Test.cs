@@ -4,6 +4,7 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     public TinkoffPaymentParameters Parameters;
+    public bool RandomOrderId = false;
 
     void Start()
     {
@@ -12,6 +13,10 @@ public class Test : MonoBehaviour
 
     public void Run()
     {
+        if(RandomOrderId)
+        {
+            Parameters.OrderId = System.Guid.NewGuid().ToString();
+        }
         Api.StartPaymentProcess(Parameters);
     }
 

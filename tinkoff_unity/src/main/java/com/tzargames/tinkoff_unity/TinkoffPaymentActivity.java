@@ -41,7 +41,10 @@ public class TinkoffPaymentActivity extends AppCompatActivity {
         switch (resultCode)
         {
             case Activity.RESULT_OK:
-                Log.i(UnityApi.TAG, "Payment successful, payment id: " + intent.getLongExtra(TinkoffAcquiring.EXTRA_PAYMENT_ID, 0));
+                long paymentId = intent.getLongExtra(TinkoffAcquiring.EXTRA_PAYMENT_ID, 0);
+                result.PaymentId = String.valueOf(paymentId);
+
+                Log.i(UnityApi.TAG, "Payment successful, payment id: " + paymentId);
                 break;
 
             case Activity.RESULT_CANCELED:

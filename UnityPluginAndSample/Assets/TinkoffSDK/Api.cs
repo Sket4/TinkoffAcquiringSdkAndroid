@@ -4,6 +4,8 @@ namespace TzarGames.Tinkoff
 {
     public static class Api
     {
+        public static event System.Action<TinkoffPaymentResult> OnPaymentResultReceived;
+
         public static void StartPaymentProcess(TinkoffPaymentParameters parameters)
         {
             checkReceiver();
@@ -34,6 +36,11 @@ namespace TzarGames.Tinkoff
                 receiver = new GameObject("TinkoffPaymentCallbackReceiver");
                 receiver.AddComponent<TinkoffPaymentCallbackReceiver>();
             }
+        }
+
+        internal static void NotifyPaymentResult(TinkoffPaymentResult result)
+        {
+            OnPaymentResultReceived?.Invoke(result);
         }
     }
 }

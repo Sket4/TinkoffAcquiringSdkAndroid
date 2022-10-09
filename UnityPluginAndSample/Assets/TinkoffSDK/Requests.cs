@@ -22,23 +22,27 @@ namespace TzarGames.Tinkoff
         public int PaymentId;
     }
 
-
     [System.Serializable]
-    public class TinkoffPaymentParameters
+    public class TinkoffStoreParameters 
     {
         public string TerminalKey;
         public string PublicKey;
         public string Password;
+        public bool EnableFps;
+        public bool IsDevMode;
+        public bool IsDebugMode;
+    }
+
+    [System.Serializable]
+    public class TinkoffPaymentParameters : TinkoffStoreParameters
+    {
         public string OrderId;
         public string CustomerKey;
         public string ClientEmail;
         public int MoneyAmount;
         public string Title;
         public string Description;
-        public bool IsDevMode;
-        public bool IsDebugMode;
-        public bool EnableFps;
-
+        
         public List<AdditionalKeyValueData> AdditionalData = new List<AdditionalKeyValueData>();
     }
 }

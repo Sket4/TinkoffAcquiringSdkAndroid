@@ -18,3 +18,4 @@ UnityPluginAndSample/Temp
 *.csproj
 *.sln
 UnityPluginAndSample/.vs
+UnityPluginAndSample/.vsconfig

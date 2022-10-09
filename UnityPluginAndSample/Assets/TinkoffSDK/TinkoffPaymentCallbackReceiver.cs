@@ -5,6 +5,7 @@ namespace TzarGames.Tinkoff
     [System.Serializable]
     public class TinkoffPaymentResult
     {
+        public string PaymentId;
         public int ResultCode;
         public int ErrorCode;
         public string ErrorMessage;
@@ -35,6 +36,8 @@ namespace TzarGames.Tinkoff
 
             var result = JsonUtility.FromJson<TinkoffPaymentResult>(serializedJsonResult);
 
+            Debug.Log($"Payment id: {result.PaymentId}");
+
             if(result.IsSuccess())
             {
                 Debug.Log("Success");
@@ -54,6 +57,8 @@ namespace TzarGames.Tinkoff
             }
 
             Debug.Log($"Code: {result.ResultCode}, ErrorCode: {result.ErrorCode} Message: {result.ErrorMessage}");
+
+            Api.NotifyPaymentResult(result);
         }
     }
 }
